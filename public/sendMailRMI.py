@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding:gbk
+#coding:utf-8
 
 import Pyro4
 
@@ -24,11 +24,11 @@ class sendMailClent(proxySendMail):
     __mailSign = '''
         <br><br><br><br>
         <font color="blue" size="2px" style="font-style:italic;">
-        ���ʼ������ɻ�ΪACT����Ӧ�ó����ͣ�����ֱ�ӻظ����ʼ�������ע���ʵ�ʼ����ݡ�<br>
-        ���յ�����ʼ��������������ʼ���ַ�趨Ϊ���Ͷ�����߳��Ͷ����粻ϣ���յ����ʼ�������ϵ�����Աȡ�����͡�<br>
+        本邮件内容由华为ACT本地应用程序发送，请勿直接回复该邮件，并请注意核实邮件内容。<br>
+        您收到这封邮件，是由于您的邮件地址设定为发送对象或者抄送对象，如不希望收到该邮件，请联系相关人员取消发送。<br>
         </font>
         <font color="gray" size="2px" style="font-style:italic;">
-        <br>�ʼ��г����Զ�����<br>
+        <br>邮件有程序自动发送<br>
         </font>
         </br>
     '''
@@ -52,7 +52,7 @@ class serviceRMI(object):
 if __name__ == '__main__':
     sm = sendMailClent()
     mailMsg = MIMEMultipart()
-    mailMsg['Subject'] = '������ϸ'
+    mailMsg['Subject'] = '工资明细'
     mailMsg['To'] = 'rozen163@163.com'
     mailMsg['Cc'] = 'rozen117@163.com'
     msgCont = 'hello'

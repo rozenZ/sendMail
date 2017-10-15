@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# encoding: gbk
+# encoding: utf-8
  
 import smtplib 
 #import socket
@@ -39,13 +39,13 @@ class proxySendMail(object):
 			#    subject = unicode(subject, 'utf-8')      
 			self.__mailMsg['Subject'] = subject
 		else:
-			raise Exception("ÓÊ¼şÖ÷ÌâÎª¿Õ")
+			raise Exception("é‚®ä»¶ä¸»é¢˜ä¸ºç©º")
 		
 		if toMail:
 			self.__toMail = toMail
 			self.__mailMsg['To'] = ','.join(toMail)
 		else:
-			raise Exception("ÓÊ¼ş·¢ËÍÁĞ±íÎª¿Õ")
+			raise Exception("é‚®ä»¶å‘é€åˆ—è¡¨ä¸ºç©º")
 		
 		if ccMail:
 			self.__toMail.extend(ccMail)
@@ -64,13 +64,13 @@ class proxySendMail(object):
 			#    subject = unicode(subject, 'utf-8')
 			self.__mailMsg['Subject'] = subject
 		else:
-			raise Exception("ÓÊ¼şÖ÷ÌâÎª¿Õ")
+			raise Exception("é‚®ä»¶ä¸»é¢˜ä¸ºç©º")
 
 		if toMail:
 			self.__toMail = toMail
 			self.__mailMsg['To'] = ','.join(toMail)
 		else:
-			raise Exception("ÓÊ¼ş·¢ËÍÁĞ±íÎª¿Õ")
+			raise Exception("é‚®ä»¶å‘é€åˆ—è¡¨ä¸ºç©º")
 
 		if ccMail:
 			self.__toMail.extend(ccMail)
@@ -87,7 +87,7 @@ class proxySendMail(object):
 
 	def appendMsg(self,msgCont):
 		'''
-		×·¼ÓÓÊ¼şÕıÎÄÄÚÈİ
+		è¿½åŠ é‚®ä»¶æ­£æ–‡å†…å®¹
 		:param msgCont:
 		:return:
 		'''
@@ -95,7 +95,7 @@ class proxySendMail(object):
 
 	def addFile(self,mailFile = None,fileName = None):
 		"""
-		Ìí¼Ó¸½¼ş
+		æ·»åŠ é™„ä»¶
 		"""
 		try:
 			if not fileName:
@@ -107,25 +107,25 @@ class proxySendMail(object):
 			
 			self.__mailMsg.attach(attFile)
 		except Exception,e:
-			raise Exception('Ìí¼Ó¸½¼şÊ§°Ü:'+str(e))
+			raise Exception('æ·»åŠ é™„ä»¶å¤±è´¥:'+str(e))
 
 	def sendMail(self):
 		"""
-		·¢ËÍÓÊ¼ş
+		å‘é€é‚®ä»¶
 		"""
 		try:
-			#QQÓÊÏäSSLÑéÖ¤
+			#QQé‚®ç®±SSLéªŒè¯
 			#smtpObj = smtplib.SMTP()
 			smtpObj = smtplib.SMTP_SSL()
 			smtpObj.connect(self.__smtp, self.__smtpPort)
 			state = smtpObj.login(self.__mailFrom, self.__mailPwd)
 			if state[0] == 235:
 				smtpObj.sendmail(str(self.__mailMsg['From']), self.__toMail, self.__mailMsg.as_string())
-				#logging.info("\"" + self._mailMsg['subject'] + "\"ÓÊ¼ş·¢ËÍ³É¹¦£¬" +
-				#	"To:" + self._mailMsg['To'] + "£¬Cc:" + self._mailMsg['Cc'])
+				#logging.info("\"" + self._mailMsg['subject'] + "\"é‚®ä»¶å‘é€æˆåŠŸï¼Œ" +
+				#	"To:" + self._mailMsg['To'] + "ï¼ŒCc:" + self._mailMsg['Cc'])
 			smtpObj.quit()
 		except smtplib.SMTPException, e:
-			raise Exception('ÓÊ¼ş·¢ËÍÊ§°Ü:'+str(e))
+			raise Exception('é‚®ä»¶å‘é€å¤±è´¥:'+str(e))
 
 if __name__ == '__main__':
 	mailInfo = {
@@ -139,13 +139,13 @@ if __name__ == '__main__':
 		'smtpPort':465
 	}
 
-	subject = '¹¤×ÊÃ÷Ï¸'
+	subject = 'å·¥èµ„æ˜ç»†'
 	toMail = ["rozen117@163.com"]
 	ccMail = ["rozen163@163.com"]
-	msg = '¹¤×ÊÃ÷Ï¸£¬Çë²éÊÕ'
+	msg = 'å·¥èµ„æ˜ç»†ï¼Œè¯·æŸ¥æ”¶'
 	try:
 		testMail = proxySendMail(mailInfo)
 		testMail.setMail(subject,toMail,ccMail,msg)
 		testMail.sendMail()
 	except Exception,e:
-		print 'ÓÊ¼ş·¢ËÍÊ§°Ü:'+str(e)
+		print 'é‚®ä»¶å‘é€å¤±è´¥:'+str(e)
