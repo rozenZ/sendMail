@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operators>
+    <autoRoute>
+        <selectByTaskId type="select">
+            select task_name,route_id,status,route_flag,exec_proc,in_param,out_param,db_user
+              from tf_l_auto_route a
+             where a.task_id = :vtask_id
+             order by route_id
+        </selectByTaskId>
+        <updateByRouteWhenStart type="update">
+            update tf_l_auto_route a
+               set a.status = 1,
+                   a.start_exec_time = sysdate
+             where a.task_id = :vtask_id
+               and a.route_id = :vroute_id
+        </updateByRouteWhenStart>
+        <updateByrouteWhenEnd type="update">
+            update tf_l_auto_route a
+               set a.status = 0,
+                   a.end_exec_time = sysdate,
+                   a.result_info = :vresult_info
+             where a.task_id = :vtask_id
+               and a.route_id = :vroute_id
+        </updateByrouteWhenEnd>
+    </autoRoute>
+    <autoTask>
+        <selectAuto type="select">
+            select *
+              from tf_l_auto_task a
+             where status = '1'
+               and sysdate between a.start_date and a.end_date
+               and sysdate > next_date
+        </selectAuto>
+        <updateSuccessed type="update">
+            update tf_l_auto_task a
+               set a.last_date = a.this_date,
+                   a.this_date = sysdate,
+                   a.next_date = eval_date(:vinterval),
+                   rsrv_info1 = 'ok'
+             where a.task_id = :vtask_id
+        </updateSuccessed>
+        <updateFailed type="update">
+            update tf_l_auto_task a
+               set a.last_date = a.this_date,
+                   a.this_date = sysdate,
+                   a.next_date = eval_date(:vinterval),
+                   a.rsrv_info1 = substr(:vsql_errm,1,200)
+             where a.task_id = :vtask_id
+        </updateFailed>
+        <selectByTaskId type="select">
+            select *
+              from tf_l_auto_task a
+             where status = '1'
+               and sysdate between a.start_date and a.end_date
+               and task_id = :vtask_id
+        </selectByTaskId>
+    </autoTask>
+    <autoMail>
+        <selectByTaskId type="select">
+            select mail_subject,mail_to,mail_cc,mail_msg,send_flag
+              from tf_l_auto_mail a
+             where a.task_id = :vtask_id
+        </selectByTaskId>
+    </autoMail>
+    <autoMailFile>
+        <selectExcelSql1 type="select">
+            select file_name,file_sql,file_sheet,start_row,start_col,file_name_temp,sheet_name
+              from tf_l_auto_mail_file a
+             where a.task_id = :vtask_id
+               and nvl(sql_flag,'0') = '1'
+        </selectExcelSql1>
+        <selectExcelSql2 type="select">
+            select file_sql
+              from tf_l_auto_mail_file a
+             where a.task_id = :vtask_id
+               and nvl(a.sql_flag,'0') = '2'
+        </selectExcelSql2>
+    </autoMailFile>
+</operators>
